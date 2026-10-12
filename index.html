@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>渡邊梢太のつくったもの帳</title>
+<meta name="description" content="Claude Code と作って GitHub Pages で公開しているサイトの一覧">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='8' y='10' width='12' height='44' rx='2' fill='%232f5d8a'/><rect x='23' y='16' width='10' height='38' rx='2' fill='%23c4572b'/><rect x='36' y='12' width='12' height='42' rx='2' fill='%23a8761c'/><rect x='4' y='54' width='56' height='5' fill='%23574f44'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f1e8; --paper:#fffdf8; --ink:#2a2723; --ink2:#5d574e; --ink3:#857d71;
+  --line:#e2dacb; --line2:#cfc4b0; --wood:#8a6a48; --wood2:#6e5236;
+  --gakushu:#2f5d8a; --annai:#2a7a72; --bukatsu:#c0532a; --koumu:#a06f12; --kenkyu:#6a4f8f; --kurashi:#4f7f33;
+  --tint:.10; --focus:#2f5d8a; --k:1;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1c1a17; --paper:#262320; --ink:#efe9de; --ink2:#c5bcae; --ink3:#9a9183;
+    --line:#3a3530; --line2:#4a443d; --wood:#6e5236; --wood2:#4f3a26;
+    --gakushu:#7fa9d6; --annai:#6cc0b5; --bukatsu:#e98d66; --koumu:#d9a94c; --kenkyu:#ae95d6; --kurashi:#94c26f;
+    --tint:.16; --focus:#7fa9d6; --k:.6;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1c1a17; --paper:#262320; --ink:#efe9de; --ink2:#c5bcae; --ink3:#9a9183;
+  --line:#3a3530; --line2:#4a443d; --wood:#6e5236; --wood2:#4f3a26;
+  --gakushu:#7fa9d6; --annai:#6cc0b5; --bukatsu:#e98d66; --koumu:#d9a94c; --kenkyu:#ae95d6; --kurashi:#94c26f;
+  --tint:.16; --focus:#7fa9d6; --k:.6;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New",system-ui,sans-serif;font-size:16px;line-height:1.75}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+.nw{white-space:nowrap}
+
+/* 見出し */
+header{padding:36px 0 8px}
+.eyebrow{font-size:14px;letter-spacing:.12em;color:var(--ink3);margin:0}
+h1{font-family:"Shippori Mincho",serif;font-weight:700;font-size:clamp(28px,6.4vw,44px);line-height:1.3;margin:4px 0 8px;letter-spacing:.02em}
+h1 .name{display:block;font-size:.5em;color:var(--ink2);letter-spacing:.08em}
+.intro{color:var(--ink2);margin:0 0 20px;max-width:40em}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 24px;max-width:560px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.stat b{display:block;font-family:"Shippori Mincho",serif;font-size:28px;line-height:1.2}
+.stat span{font-size:14px;color:var(--ink3)}
+
+/* 操作 */
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 8px;border-bottom:1px solid var(--line)}
+.views{display:inline-grid;grid-template-columns:repeat(3,auto);background:var(--paper);border:1px solid var(--line2);border-radius:999px;padding:3px;gap:2px}
+.views button{border:0;background:none;min-height:44px;padding:0 18px;border-radius:999px;cursor:pointer;font-size:15px;color:var(--ink2);display:flex;align-items:center;gap:6px}
+.views button[aria-pressed="true"]{background:var(--ink);color:var(--bg);font-weight:500}
+.views svg{width:18px;height:18px}
+.chips{display:flex;gap:8px;overflow-x:auto;margin:10px -16px 0;padding:0 16px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line2);background:var(--paper);cursor:pointer;font-size:15px;display:flex;align-items:center;gap:6px;color:var(--ink2)}
+.chip i{width:10px;height:10px;border-radius:50%;background:var(--c,var(--ink3))}
+.chip small{font-size:14px;color:var(--ink3)}
+.chip[aria-pressed="true"]{border-color:var(--c,var(--ink));color:var(--ink);background:color-mix(in srgb,var(--c,var(--ink)) calc(var(--tint)*100%),var(--paper));font-weight:500}
+
+main{padding:8px 0 40px}
+.sec{margin:28px 0 8px}
+.sec h2{font-family:"Shippori Mincho",serif;font-size:22px;margin:0;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sec h2::before{content:"";width:6px;height:22px;background:var(--c);border-radius:2px;align-self:center}
+.sec h2 small{font-family:"Zen Kaku Gothic New",sans-serif;font-size:14px;color:var(--ink3);font-weight:400}
+
+/* カード */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px;margin-top:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.shot{display:block;aspect-ratio:16/10;overflow:hidden;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--c) calc(var(--tint)*100%),var(--paper))}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}
+.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:var(--ink3)}
+.tag{color:var(--c);background:color-mix(in srgb,var(--c) calc(var(--tint)*100%),transparent);border-radius:6px;padding:1px 8px;font-weight:500}
+.card h3,.dlg h3{font-size:19px;margin:6px 0 4px;line-height:1.45}
+.lead{margin:0 0 6px}
+.pts{margin:0 0 14px;padding:0;list-style:none;font-size:14.5px;color:var(--ink2)}
+.pts li{padding-left:1.1em;position:relative;margin:2px 0}
+.pts li::before{content:"";position:absolute;left:2px;top:.75em;width:6px;height:6px;border-radius:50%;background:var(--c)}
+.acts{margin-top:auto;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.open{min-height:46px;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--c);color:#fff;text-decoration:none;border-radius:10px;font-weight:500}
+:root[data-theme="dark"] .open{color:#1c1a17}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .open{color:#1c1a17}}
+.copy{min-height:46px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:none;cursor:pointer;font-size:14.5px;color:var(--ink2)}
+.copy.done{border-color:var(--annai);color:var(--annai)}
+
+/* 本棚 */
+.shelf{margin-top:12px;padding:0 10px;display:flex;flex-wrap:wrap;align-items:flex-end;column-gap:4px;row-gap:14px;
+  background:linear-gradient(var(--paper),var(--paper));border:1px solid var(--line);border-radius:12px 12px 4px 4px;padding:16px 12px 0}
+.row{display:contents}
+.book{--w:48px;width:var(--w);height:var(--h);border:0;padding:12px 0 18px;cursor:pointer;border-radius:4px 4px 1px 1px;position:relative;
+  background:color-mix(in srgb,var(--c) calc(var(--mix) * var(--k)),#1c1a17);color:#fff;display:flex;justify-content:center;
+  box-shadow:inset -4px 0 0 rgba(0,0,0,.14),inset 3px 0 0 rgba(255,255,255,.10);transition:transform .15s}
+.book::before,.book::after{content:"";position:absolute;left:0;right:0;height:2px;background:rgba(255,255,255,.45)}
+.book::before{top:6px}.book::after{bottom:10px}
+.book span{writing-mode:vertical-rl;font-family:"Shippori Mincho",serif;font-weight:700;font-size:var(--fs);letter-spacing:.04em;line-height:1}
+.book:hover,.book:focus-visible{transform:translateY(-6px)}
+.board{flex:none;width:calc(100% + 24px);height:12px;margin:-14px -12px 14px;background:var(--wood);border-bottom:4px solid var(--wood2)}
+.board:last-child{margin-bottom:0}
+.hint{font-size:14px;color:var(--ink3);margin:8px 0 0}
+
+/* 年表 */
+.tl{margin-top:16px;position:relative}
+.month{font-family:"Shippori Mincho",serif;font-size:20px;margin:24px 0 8px}
+.day{display:grid;grid-template-columns:62px minmax(0,1fr);gap:10px;position:relative;padding-bottom:14px}
+.day::before{content:"";position:absolute;left:30px;top:12px;bottom:-4px;width:2px;background:var(--line2)}
+.day:last-child::before{display:none}
+.date{position:relative;z-index:1;text-align:center;font-size:14px;color:var(--ink2);line-height:1.2;padding-top:2px}
+.date b{display:block;font-family:"Shippori Mincho",serif;font-size:22px;color:var(--ink);background:var(--bg)}
+.ents{display:grid;gap:8px}
+.ent{display:grid;grid-template-columns:56px minmax(0,1fr);gap:12px;align-items:start;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:0 10px 10px 0;padding:8px 12px 8px 8px;text-align:left;cursor:pointer;width:100%;min-height:44px}
+.ent img{width:56px;height:72px;object-fit:cover;object-position:top;border-radius:4px;border:1px solid var(--line)}
+.ent b{display:block;font-size:16px;line-height:1.45}
+.ent span{display:block;font-size:14px;color:var(--ink2);line-height:1.6}
+.ent em{font-style:normal;font-size:14px;color:var(--c)}
+.count{font-size:14px;color:var(--ink3);margin-left:6px}
+
+/* カードの下の小さな年表 */
+.mini{margin-top:40px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px}
+.mini h2{font-family:"Shippori Mincho",serif;font-size:20px;margin:0 0 4px}
+.mini p{margin:0 0 10px;font-size:14.5px;color:var(--ink2)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:96px;border-bottom:1px solid var(--line2)}
+.bars div{flex:1;min-width:0;display:flex;flex-direction:column-reverse;gap:2px}
+.bars i{display:block;height:12px;border-radius:2px;background:var(--c)}
+.axis{display:flex;justify-content:space-between;font-size:14px;color:var(--ink3);margin-top:4px}
+.more{margin-top:10px;min-height:44px;border:1px solid var(--line2);background:none;border-radius:10px;padding:0 16px;cursor:pointer}
+
+/* くわしく（本棚・年表から） */
+.dlg{border:0;padding:0;border-radius:16px;background:var(--paper);color:var(--ink);width:min(440px,calc(100% - 32px));max-height:calc(100% - 32px)}
+.dlg::backdrop{background:rgba(20,16,12,.55)}
+.dlg .shot{aspect-ratio:16/11}
+.x{position:absolute;right:8px;top:8px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:22px;cursor:pointer}
+
+footer{border-top:1px solid var(--line);padding:20px 0 40px;font-size:14px;color:var(--ink3)}
+footer p{margin:4px 0}
+[hidden]{display:none!important}
+
+@media (max-width:719px){
+  header{padding-top:24px}
+  .stat{padding:8px 10px}
+  .stat b{font-size:24px}
+  .views{display:grid;width:100%}
+  .views button{justify-content:center;padding:0 8px}
+  .book{--w:46px}
+}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <p class="eyebrow">WORKS ・ Claude Code と作ったもの</p>
+  <h1><span class="name">渡邊梢太の</span>つくったもの帳</h1>
+  <p class="intro">授業・部活動・校務のために <span class="nw">Claude Code</span> と作り、GitHub Pages で公開しているサイトの一覧です。どれもアカウント登録なしで、スマホからそのまま開けます。</p>
+  <div class="stats" id="stats"></div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="views" role="group" aria-label="表示のしかた">
+      <button type="button" data-view="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>カード</button>
+      <button type="button" data-view="shelf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4v16M9 6v14M14 4v16M17 7l3 13M2 21h20"/></svg>本棚</button>
+      <button type="button" data-view="time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3v18"/><circle cx="6" cy="7" r="2"/><circle cx="6" cy="17" r="2"/><path d="M11 7h9M11 17h9"/></svg>年表</button>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="分類でしぼる"></div>
+  </div>
+</div>
+
+<main class="wrap" id="main"></main>
+
+<dialog class="dlg" id="dlg" aria-label="くわしく"></dialog>
+
+<footer class="wrap">
+  <p>載せているのは、GitHub（upopotennis-gif）で公開しているサイトです。試作版を含みます。</p>
+  <p id="built"></p>
+</footer>
+
+<script>
+const D = {"categories": [{"key": "gakushu", "name": "生徒の学習", "lead": "スマホで取り組む自習用の道場"}, {"key": "annai", "name": "生徒への案内", "lead": "時間割や進路を調べるページ"}, {"key": "bukatsu", "name": "部活動", "lead": "ソフトテニス部・吹奏楽部・試合運営"}, {"key": "koumu", "name": "先生の仕事", "lead": "学級・校務・行事・文章指導の道具"}, {"key": "kenkyu", "name": "研究・情報", "lead": "国語科教育の文献・学会と、成果物の紹介"}, {"key": "kurashi", "name": "暮らし", "lead": "家庭で使うもの"}], "items": [{"repo": "kokugo-dojo", "cat": "gakushu", "title": "国語道場", "lead": "現代文・古文・漢文の道場へ1つのページから入れる、生徒向けの入口。", "points": ["現代文・近代文・実用文・古文・漢文の各道場へのリンク", "アカウント登録なし、開けばすぐ始められる"], "created": "2026-09-23", "pushed": "2026-09-28", "url": "https://upopotennis-gif.github.io/kokugo-dojo/"}, {"repo": "kobun-dojo", "cat": "gakushu", "title": "古文道場", "lead": "古典文法・助動詞の実戦・古文単語・古典常識を4択で鍛えるドリル。", "points": ["文法34単元＋読解、単語は「Look@古文単語337」の番号で範囲指定", "答えるとすぐ解説、間違えた問題は苦手ボックスにたまる"], "created": "2026-09-08", "pushed": "2026-09-27", "url": "https://upopotennis-gif.github.io/kobun-dojo/"}, {"repo": "kanbun-dojo", "cat": "gakushu", "title": "漢文道場", "lead": "漢文の辞典・句形ドリル・背景知識の3ページ。", "points": ["句形・語句・訓読のきまりなど249項目の辞典", "句形10単元×10問、諸子百家や漢詩のきまりの読み物"], "created": "2026-09-16", "pushed": "2026-09-27", "url": "https://upopotennis-gif.github.io/kanbun-dojo/"}, {"repo": "gendaibun-keyword", "cat": "gakushu", "title": "現代文キーワード辞典", "lead": "入試の評論に出るキーワード285語を、引く・覚える・確かめるの3つで使える辞典。", "points": ["8分野から引ける、暗記カードと4択テストつき", "覚えた・あいまいの印で進み具合がわかる"], "created": "2026-09-11", "pushed": "2026-09-27", "url": "https://upopotennis-gif.github.io/gendaibun-keyword/"}, {"repo": "kindai-dojo", "cat": "gakushu", "title": "近代文章道場", "lead": "漱石・鷗外の時代の言葉と背景を学ぶ、高3向けの辞典と入試演習。", "points": ["近代語363語の辞典（用例は青空文庫の本文から）", "入試形式の4択100問と、明治・大正の暮らしの読み物"], "created": "2026-09-28", "pushed": "2026-09-28", "url": "https://upopotennis-gif.github.io/kindai-dojo/"}, {"repo": "jitsuyo-dojo", "cat": "gakushu", "title": "実用文道場", "lead": "共通テスト第3問型の、資料・グラフ・規約を読み取る練習。", "points": ["資料読解8単元160問", "実用文の言葉80問（規約・案内文の言い回し）"], "created": "2026-09-28", "pushed": "2026-09-28", "url": "https://upopotennis-gif.github.io/jitsuyo-dojo/"}, {"repo": "eigo-dojo", "cat": "gakushu", "title": "英語道場", "lead": "英文法・英文解釈・つなぎ言葉・英単語の4択ドリル（試作版）。", "points": ["古文道場と同じ仕組みの姉妹版", "答えるとすぐ和訳と解説が出る"], "created": "2026-09-16", "pushed": "2026-09-27", "url": "https://upopotennis-gif.github.io/eigo-dojo/"}, {"repo": "sugaku-dojo", "cat": "gakushu", "title": "数学道場", "lead": "数学Ⅰ・AとⅡ・B・Cの18単元を4択10問で確かめるドリル（試作版）。", "points": ["途中式つきの解説", "方眼ノートと定規の見た目"], "created": "2026-09-16", "pushed": "2026-09-27", "url": "https://upopotennis-gif.github.io/sugaku-dojo/"}, {"repo": "joho-dojo", "cat": "gakushu", "title": "情報道場", "lead": "情報Ⅰの知識と、計算・プログラムの読み取りの4択ドリル（試作版）。", "points": ["知識8単元／計算・プログラム5単元", "プログラムは共通テスト用プログラム表記"], "created": "2026-09-16", "pushed": "2026-09-27", "url": "https://upopotennis-gif.github.io/joho-dojo/"}, {"repo": "jikanwari-navi", "cat": "annai", "title": "時間割ナビ", "lead": "クラスと選択科目を選ぶと、その日の時間割と教室がわかる生徒向けページ。", "points": ["行事や特別時間割も反映", "選んだ内容はその端末にだけ保存"], "created": "2026-10-04", "pushed": "2026-10-10", "url": "https://upopotennis-gif.github.io/jikanwari-navi/"}, {"repo": "hantei-navi", "cat": "annai", "title": "判定ライン帳 2026", "lead": "共通テストのB判定ライン・入試科目・配点割合を、条件でしぼって見比べるページ。", "points": ["自分の得点率を入れると届く大学の目安がわかる", "系統・地域・国公私立でしぼり込み"], "created": "2026-09-29", "pushed": "2026-10-03", "url": "https://upopotennis-gif.github.io/hantei-navi/"}, {"repo": "softtennis-dojo", "cat": "bukatsu", "title": "ソフトテニス道場", "lead": "高校ソフトテニス部の理論学習サイト。雁行陣のセオリーを読んで、動かして、解いて学ぶ。", "points": ["セオリー講座7章・場面判断のドリル112問", "相手の打点を動かすと立ち位置が変わるポジション練習"], "created": "2026-09-18", "pushed": "2026-09-22", "url": "https://upopotennis-gif.github.io/softtennis-dojo/"}, {"repo": "doubles-record", "cat": "bukatsu", "title": "ダブルス戦績ノート", "lead": "部内・練習試合・大会のダブルスの結果を記録し、個人とペアの勝率を出す。", "points": ["部員みんなで同じ記録帳に書き込める", "自分用・ほかの部の記録帳も作れる"], "created": "2026-10-10", "pushed": "2026-10-11", "url": "https://upopotennis-gif.github.io/doubles-record/"}, {"repo": "league-maker", "cat": "bukatsu", "title": "リーグ対戦表メーカー", "lead": "ダブルスのリーグ分けから対戦表の印刷、結果の入力と順位づけまで。", "points": ["高体連の対戦表の書式で印刷", "大会番号で複数の端末から結果を入力"], "created": "2026-09-27", "pushed": "2026-10-12", "url": "https://upopotennis-gif.github.io/league-maker/"}, {"repo": "form-check", "cat": "bukatsu", "title": "フォームチェック", "lead": "ソフトテニスのフォーム動画に骨格線とラケットの軌跡を重ね、2本を並べて比べる。", "points": ["インパクトの瞬間をそろえて A/B 比較", "動画は端末の中だけで処理し、送信しない"], "created": "2026-10-04", "pushed": "2026-10-04", "url": "https://upopotennis-gif.github.io/form-check/"}, {"repo": "gakuten-dojo", "cat": "bukatsu", "title": "楽典道場", "lead": "吹奏楽部の初心者が楽典を自習する4択ドリルと、学習会のスライド。", "points": ["13単元260問、楽譜と鍵盤の図つき", "1回15分・年間35回の学習会スライド"], "created": "2026-09-17", "pushed": "2026-09-17", "url": "https://upopotennis-gif.github.io/gakuten-dojo/"}, {"repo": "handball-schedule", "cat": "bukatsu", "title": "ハンドボール進行表", "lead": "練習試合の進行表を作り、番号で共有するページ。", "points": ["チーム数・コート数・試合時間から、連戦の少ない組み合わせを自動で作る", "A4の進行表とチーム別の表を印刷"], "created": "2026-09-27", "pushed": "2026-09-27", "url": "https://upopotennis-gif.github.io/handball-schedule/"}, {"repo": "sekigae-board", "cat": "koumu", "title": "席替えボード", "lead": "名簿を貼るだけで、条件つきの席替えと座席表ができる。", "points": ["離したい組み合わせ・前方配慮を満たす配置を自動で作る", "名簿はそのパソコンの中だけで扱う"], "created": "2026-09-14", "pushed": "2026-09-15", "url": "https://upopotennis-gif.github.io/sekigae-board/"}, {"repo": "survey-analyzer", "cat": "koumu", "title": "アンケート集計ボード", "lead": "アンケートのCSV・Excelを置くだけで、グラフと自由記述の分類ができる。", "points": ["選択式はグラフ、自由記述は内容ごとに分類", "要確認の回答を抜き出す"], "created": "2026-09-14", "pushed": "2026-09-16", "url": "https://upopotennis-gif.github.io/survey-analyzer/"}, {"repo": "jikanwari-navi-staff", "cat": "koumu", "title": "時間割ナビ 教員用", "lead": "先生向けの時間割・教室・行事の確認ページ。", "points": ["校内の先生だけが使う（合言葉つき）", "授業の重なりや教室の確認に"], "created": "2026-10-04", "pushed": "2026-10-10", "url": "https://upopotennis-gif.github.io/jikanwari-navi-staff/"}, {"repo": "sotsuron-akapen", "cat": "koumu", "title": "卒論 赤ペンチェック", "lead": "卒業論文のWordを入れると、体裁を確かめて赤ペンのPDFで返す。", "points": ["先生はクラス分をまとめて入れて一覧にできる", "ファイルはブラウザの中だけで読み、送信しない"], "created": "2026-09-29", "pushed": "2026-09-29", "url": "https://upopotennis-gif.github.io/sotsuron-akapen/"}, {"repo": "tensaku-gemini", "cat": "koumu", "title": "出願書類の添削室（Gemini版）", "lead": "志望理由書などの添削を、学校のGeminiに頼むための依頼文を作るページ。", "points": ["大学・学部のアドミッション・ポリシーの要点を入れる", "生徒の名前は伏せ字にしてから渡す"], "created": "2026-10-02", "pushed": "2026-10-02", "url": "https://upopotennis-gif.github.io/tensaku-gemini/"}, {"repo": "kissa-register", "cat": "koumu", "title": "喫茶レジ", "lead": "文化祭の喫茶で使う販売レジ。複数のタブレットで注文・在庫・売上を共有。", "points": ["担当ごとの使い方ガイドつき", "イベントコードで団体ごとに分かれる"], "created": "2026-09-03", "pushed": "2026-09-16", "url": "https://upopotennis-gif.github.io/kissa-register/"}, {"repo": "kokugo-dougubako", "cat": "kenkyu", "title": "渡邊梢太の国語資料", "lead": "国語の先生向けに公開しているページの一覧。", "points": ["授業の教材・研究・文章指導の道具を紹介", "このページの国語版"], "created": "2026-10-04", "pushed": "2026-10-04", "url": "https://upopotennis-gif.github.io/kokugo-dougubako/"}, {"repo": "kokugo-kenkyukai-info", "cat": "kenkyu", "title": "国語科 学会・研究会カレンダー", "lead": "国語科教育に関わる9団体の、これから開かれる学会・研究会の一覧。", "points": ["毎日自動で更新", "自分のカレンダーに登録できる"], "created": "2026-09-13", "pushed": "2026-10-12", "url": "https://upopotennis-gif.github.io/kokugo-kenkyukai-info/"}, {"repo": "seika-tenbou", "cat": "kenkyu", "title": "成果と展望 文献案内", "lead": "『国語科教育学研究の成果と展望Ⅱ・Ⅲ』の参考文献、約2,800件を章ごとに引ける。", "points": ["無料で読めるものだけに絞れる", "選んだ文献をリストにしてコピー"], "created": "2026-09-27", "pushed": "2026-09-28", "url": "https://upopotennis-gif.github.io/seika-tenbou/"}, {"repo": "kozure-biyori", "cat": "kurashi", "title": "こづれ日和", "lead": "川崎市内の駅から、子連れで行けるおでかけ先を探すページ。", "points": ["南武線・東横線など5路線16駅から選ぶ", "外遊び・屋内・食事の施設と、月ごとのイベント"], "created": "2026-10-04", "pushed": "2026-10-04", "url": "https://upopotennis-gif.github.io/kozure-biyori/"}], "built": "2026-10-12"};
+const CATS = Object.fromEntries(D.categories.map(c => [c.key, c]));
+const ITEMS = D.items.filter(i => i.created);
+const SPINE = {"出願書類の添削室（Gemini版）":"出願書類の添削室","国語科 学会・研究会カレンダー":"学会・研究会カレンダー","成果と展望 文献案内":"成果と展望 文献案内","判定ライン帳 2026":"判定ライン帳"};
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const md = s => { const [y,m,d] = s.split("-"); return `${+m}/${+d}`; };
+const store = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
+
+let view = ["card","shelf","time"].includes(store.get("tm-view")) ? store.get("tm-view") : "card";
+let cat = "all";
+
+/* 数字 */
+const first = ITEMS.map(i => i.created).sort()[0];
+const last = ITEMS.map(i => i.pushed).sort().at(-1);
+const days = Math.round((new Date(D.built) - new Date(first)) / 864e5) + 1;
+$("#stats").innerHTML =
+  `<div class="stat"><b>${ITEMS.length}</b><span>公開中</span></div>` +
+  `<div class="stat"><b>${days}<small style="font-size:14px">日</small></b><span>${md(first)}から</span></div>` +
+  `<div class="stat"><b>${md(last)}</b><span>最新の更新</span></div>`;
+$("#built").textContent = `ページの更新 ${D.built.replaceAll("-", ".")}`;
+
+/* 分類チップ */
+function chips(){
+  const n = k => ITEMS.filter(i => i.cat === k).length;
+  $("#chips").innerHTML = `<button type="button" class="chip" data-cat="all" aria-pressed="${cat==="all"}">すべて <small>${ITEMS.length}</small></button>` +
+    D.categories.map(c => `<button type="button" class="chip" data-cat="${c.key}" style="--c:var(--${c.key})" aria-pressed="${cat===c.key}"><i></i>${esc(c.name)} <small>${n(c.key)}</small></button>`).join("");
+}
+$("#chips").addEventListener("click", e => { const b = e.target.closest(".chip"); if (!b) return; cat = b.dataset.cat; chips(); render();
+let lastPer = perRow();
+addEventListener("resize", () => { const p = perRow(); if (view === "shelf" && p !== lastPer) { lastPer = p; render(); } }); });
+
+document.querySelectorAll(".views button").forEach(b => b.addEventListener("click", () => { view = b.dataset.view; store.set("tm-view", view); render(); window.scrollTo({top: $(".bar").offsetTop, behavior: "smooth"}); }));
+
+const shown = () => ITEMS.filter(i => cat === "all" || i.cat === cat);
+const cats = () => D.categories.filter(c => cat === "all" || c.key === cat).filter(c => ITEMS.some(i => i.cat === c.key));
+const secHead = c => `<div class="sec" style="--c:var(--${c.key})"><h2>${esc(c.name)}<small>${esc(c.lead)}</small></h2></div>`;
+const shot = (i, lazy) => `<img src="shots/${i.repo}.jpg" alt="${esc(i.title)}の画面" ${lazy ? 'loading="lazy"' : ""} width="390" height="560">`;
+const acts = i => `<div class="acts"><a class="open" href="${i.url}" target="_blank" rel="noopener">ひらく<span aria-hidden="true">↗</span></a><button type="button" class="copy" data-url="${i.url}">URLをコピー</button></div>`;
+const detail = i => `<div class="meta"><span class="tag">${esc(CATS[i.cat].name)}</span><span>${md(i.created)} 公開</span></div>
+  <h3>${esc(i.title)}</h3><p class="lead">${esc(i.lead)}</p>
+  <ul class="pts">${i.points.map(p => `<li>${esc(p)}</li>`).join("")}</ul>${acts(i)}`;
+
+function cardView(){
+  let h = cats().map(c => secHead(c) + `<div class="grid">` +
+    ITEMS.filter(i => i.cat === c.key).map(i =>
+      `<article class="card" style="--c:var(--${i.cat})"><a class="shot" href="${i.url}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">${shot(i, true)}</a><div class="body">${detail(i)}</div></article>`
+    ).join("") + `</div>`).join("");
+  /* 小さな年表：日ごとの公開数を分類の色で積む */
+  const start = new Date(first), end = new Date(D.built), cols = [];
+  for (let t = new Date(start); t <= end; t.setDate(t.getDate() + 1)) {
+    const k = t.toISOString().slice(0, 10);
+    cols.push(`<div title="${md(k)}">${ITEMS.filter(i => i.created === k).map(i => `<i style="--c:var(--${i.cat})" title="${esc(i.title)}"></i>`).join("")}</div>`);
+  }
+  h += `<section class="mini"><h2>あゆみ</h2><p>${md(first)} の「${esc(ITEMS.find(i => i.created === first).title)}」から ${days} 日で ${ITEMS.length} 作。1つの四角が1作です。</p>
+    <div class="bars" aria-hidden="true">${cols.join("")}</div><div class="axis"><span>${md(first)}</span><span>${md(D.built)}</span></div>
+    <button type="button" class="more" data-go="time">年表でくわしく見る →</button></section>`;
+  return h;
+}
+
+const perRow = () => Math.max(3, Math.floor(($("#main").clientWidth - 32 - 24) / 53));
+function shelfView(){
+  return cats().map(c => {
+    const books = ITEMS.filter(i => i.cat === c.key).map((i, k) => {
+      const t = SPINE[i.title] || i.title, n = [...t].length;
+      const fs = n <= 8 ? 16 : n <= 10 ? 15 : 14;
+      const hgt = Math.min(214, Math.max(128, 40 + n * fs * 1.08));
+      const mix = [100, 82, 92, 74][k % 4];
+      const w = [48, 52, 46, 50][k % 4];
+      return `<button type="button" class="book" data-repo="${i.repo}" style="--c:var(--${i.cat});--h:${hgt}px;--fs:${fs}px;--mix:${mix}%;--w:${w}px" aria-label="${esc(i.title)}"><span>${esc(t)}</span></button>`;
+    });
+    const per = perRow(), rows = [];
+    for (let k = 0; k < books.length; k += per) rows.push(books.slice(k, k + per).join("") + `<div class="board"></div>`);
+    return secHead(c) + `<div class="shelf">${rows.join("")}</div>`;
+  }).join("") + `<p class="hint">背表紙を押すと、説明とリンクが開きます。</p>`;
+}
+
+function timeView(){
+  const list = shown().slice().sort((a, b) => a.created.localeCompare(b.created) || a.title.localeCompare(b.title, "ja"));
+  let h = `<div class="tl">`, mon = "", n = 0;
+  const byDay = {};
+  list.forEach(i => (byDay[i.created] ||= []).push(i));
+  for (const [day, arr] of Object.entries(byDay)) {
+    const [y, m, d] = day.split("-");
+    if (y + m !== mon) { if (mon) h += `</div>`; mon = y + m; h += `<h2 class="month">${y}年${+m}月</h2><div>`; }
+    n += arr.length;
+    const wd = "日月火水木金土"[new Date(day).getDay()];
+    h += `<div class="day"><div class="date"><b>${+d}</b>${wd}</div><div class="ents">` +
+      arr.map(i => `<button type="button" class="ent" data-repo="${i.repo}" style="--c:var(--${i.cat})">${shot(i, true)}<div><b>${esc(i.title)}</b><em>${esc(CATS[i.cat].name)}</em><span>${esc(i.lead)}</span></div></button>`).join("") +
+      `</div></div>`;
+  }
+  return h + (mon ? `</div>` : "") + `</div>`;
+}
+
+function render(){
+  document.querySelectorAll(".views button").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === view));
+  $("#main").innerHTML = view === "card" ? cardView() : view === "shelf" ? shelfView() : timeView();
+}
+
+/* くわしく */
+const dlg = $("#dlg");
+function openDetail(repo){
+  const i = ITEMS.find(x => x.repo === repo);
+  dlg.style.setProperty("--c", `var(--${i.cat})`);
+  dlg.innerHTML = `<div style="position:relative"><a class="shot" href="${i.url}" target="_blank" rel="noopener" tabindex="-1">${shot(i)}</a><button type="button" class="x" aria-label="閉じる">×</button></div><div class="body">${detail(i)}</div>`;
+  dlg.showModal();
+}
+dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest(".x")) dlg.close(); });
+
+document.addEventListener("click", async e => {
+  const b = e.target.closest(".book,.ent"); if (b) return openDetail(b.dataset.repo);
+  const g = e.target.closest("[data-go]"); if (g) { view = g.dataset.go; store.set("tm-view", view); render(); window.scrollTo({top: $(".bar").offsetTop}); return; }
+  const c = e.target.closest(".copy"); if (!c) return;
+  try { await navigator.clipboard.writeText(c.dataset.url); }
+  catch (err) { const t = document.createElement("textarea"); t.value = c.dataset.url; document.body.append(t); t.select(); document.execCommand("copy"); t.remove(); }
+  c.textContent = "コピーしました"; c.classList.add("done");
+  setTimeout(() => { c.textContent = "URLをコピー"; c.classList.remove("done"); }, 1600);
+});
+
+chips(); render();
+let lastPer = perRow();
+addEventListener("resize", () => { const p = perRow(); if (view === "shelf" && p !== lastPer) { lastPer = p; render(); } });
+</script>
+</body>
+</html>
