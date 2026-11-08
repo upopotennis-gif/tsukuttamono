@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>ひらく</title>
+<style>
+:root{--bg:#EEF1EC;--ink:#1B2420;--muted:#56635C;--accent:#2D5B4E}
+@media (prefers-color-scheme: dark){:root{--bg:#111614;--ink:#E2E8E3;--muted:#9FAAA3;--accent:#86C4AE}}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.8 "Hiragino Sans","Yu Gothic",system-ui,sans-serif;padding:48px 16px}
+main{max-width:520px;margin:0 auto}
+p{margin:0 0 12px}
+.sub{color:var(--muted);font-size:15px}
+a{color:var(--accent);font-weight:700;overflow-wrap:anywhere;display:inline-block;min-height:44px;line-height:44px}
+</style>
+</head>
+<body>
+<main>
+<p id="msg">ひらいています…</p>
+<p class="sub" id="sub"></p>
+</main>
+<script>
+(function(){
+  // 台帳の「ブラウザで開く」から来る。行き先は # のうしろ（サーバーには送られない）。
+  // 行き先は claude.ai のアーティファクトだけに限る。
+  var raw = "";
+  try{ raw = decodeURIComponent(location.hash.slice(1)); }catch(e){}
+  var ok = /^https:\/\/claude\.ai\/(artifact|code\/artifact)\/[A-Za-z0-9-]+\/?$/.test(raw);
+  var msg = document.getElementById("msg"), sub = document.getElementById("sub");
+  if(!ok){
+    msg.textContent = "ひらく先がありません。";
+    sub.textContent = "このページは、アーティファクト台帳の「ブラウザで開く」から使います。";
+    return;
+  }
+  history.replaceState(null, "", location.pathname);
+  location.replace(raw);
+  var a = document.createElement("a");
+  a.href = raw; a.rel = "noreferrer"; a.textContent = "開かないときはここを押す";
+  sub.append(a);
+})();
+</script>
+</body>
+</html>
